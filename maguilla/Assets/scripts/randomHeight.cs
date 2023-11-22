@@ -5,9 +5,10 @@ using UnityEngine.PlayerLoop;
 
 public class randomHeight : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Transform _transform;
     void Awake()
     {
+        _transform = transform;
         foreach (Transform childTransform in transform)
         {
             // Déplacez chaque enfant par rapport au parent

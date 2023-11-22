@@ -44,6 +44,42 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""24c172e6-e10c-41e4-91a0-12bfab6f8cde"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""shootManette"",
+                    ""type"": ""Button"",
+                    ""id"": ""804a6a5e-340d-493c-80f2-59e0eef61878"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""directionshoot"",
+                    ""type"": ""Value"",
+                    ""id"": ""e0a1a408-ad3b-41fc-a1c4-08c52bb9fe7d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""directionShootMouse"",
+                    ""type"": ""Value"",
+                    ""id"": ""81e8f70b-2d7e-48da-8afa-3bf35a30d345"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -134,6 +170,94 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
                     ""action"": ""jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc08446e-8a3d-4ee4-969b-de1c13581cf8"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""ccabafb1-1f9b-4792-93a0-a75c0d07479f"",
+                    ""path"": ""2DVector(mode=2)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""directionshoot"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""a04d0bf5-22ad-4403-94cf-1efb1187b97b"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""directionshoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""100303b9-2fdb-43f7-b35c-b48aa62104ad"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""directionshoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""e5c3e805-741f-4247-a3e9-ff913ca97d7b"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""directionshoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""09c8c709-5905-4a1b-8d1a-5034c9e74a80"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""directionshoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1fc61a7-0553-4d29-a617-4e78aaebf70a"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""directionShootMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0222914c-8778-4aae-b969-a731c55e890c"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""shootManette"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -144,6 +268,10 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
         m_player = asset.FindActionMap("player", throwIfNotFound: true);
         m_player_Movement = m_player.FindAction("Movement", throwIfNotFound: true);
         m_player_jump = m_player.FindAction("jump", throwIfNotFound: true);
+        m_player_shoot = m_player.FindAction("shoot", throwIfNotFound: true);
+        m_player_shootManette = m_player.FindAction("shootManette", throwIfNotFound: true);
+        m_player_directionshoot = m_player.FindAction("directionshoot", throwIfNotFound: true);
+        m_player_directionShootMouse = m_player.FindAction("directionShootMouse", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,12 +335,20 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_player_Movement;
     private readonly InputAction m_player_jump;
+    private readonly InputAction m_player_shoot;
+    private readonly InputAction m_player_shootManette;
+    private readonly InputAction m_player_directionshoot;
+    private readonly InputAction m_player_directionShootMouse;
     public struct PlayerActions
     {
         private @CustomInput m_Wrapper;
         public PlayerActions(@CustomInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_player_Movement;
         public InputAction @jump => m_Wrapper.m_player_jump;
+        public InputAction @shoot => m_Wrapper.m_player_shoot;
+        public InputAction @shootManette => m_Wrapper.m_player_shootManette;
+        public InputAction @directionshoot => m_Wrapper.m_player_directionshoot;
+        public InputAction @directionShootMouse => m_Wrapper.m_player_directionShootMouse;
         public InputActionMap Get() { return m_Wrapper.m_player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -228,6 +364,18 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
             @jump.started += instance.OnJump;
             @jump.performed += instance.OnJump;
             @jump.canceled += instance.OnJump;
+            @shoot.started += instance.OnShoot;
+            @shoot.performed += instance.OnShoot;
+            @shoot.canceled += instance.OnShoot;
+            @shootManette.started += instance.OnShootManette;
+            @shootManette.performed += instance.OnShootManette;
+            @shootManette.canceled += instance.OnShootManette;
+            @directionshoot.started += instance.OnDirectionshoot;
+            @directionshoot.performed += instance.OnDirectionshoot;
+            @directionshoot.canceled += instance.OnDirectionshoot;
+            @directionShootMouse.started += instance.OnDirectionShootMouse;
+            @directionShootMouse.performed += instance.OnDirectionShootMouse;
+            @directionShootMouse.canceled += instance.OnDirectionShootMouse;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -238,6 +386,18 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
             @jump.started -= instance.OnJump;
             @jump.performed -= instance.OnJump;
             @jump.canceled -= instance.OnJump;
+            @shoot.started -= instance.OnShoot;
+            @shoot.performed -= instance.OnShoot;
+            @shoot.canceled -= instance.OnShoot;
+            @shootManette.started -= instance.OnShootManette;
+            @shootManette.performed -= instance.OnShootManette;
+            @shootManette.canceled -= instance.OnShootManette;
+            @directionshoot.started -= instance.OnDirectionshoot;
+            @directionshoot.performed -= instance.OnDirectionshoot;
+            @directionshoot.canceled -= instance.OnDirectionshoot;
+            @directionShootMouse.started -= instance.OnDirectionShootMouse;
+            @directionShootMouse.performed -= instance.OnDirectionShootMouse;
+            @directionShootMouse.canceled -= instance.OnDirectionShootMouse;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -259,5 +419,9 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
+        void OnShootManette(InputAction.CallbackContext context);
+        void OnDirectionshoot(InputAction.CallbackContext context);
+        void OnDirectionShootMouse(InputAction.CallbackContext context);
     }
 }

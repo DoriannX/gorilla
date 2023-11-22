@@ -8,8 +8,6 @@ using FixedUpdate = UnityEngine.PlayerLoop.FixedUpdate;
 
 public class moveCharacter : MonoBehaviour
 {
-    [SerializeField] float graviteAuSol = 1f; // Gravité lorsque le personnage est au sol
-    [SerializeField] float graviteEnAir = 2f; // Gravité lorsque le personnage est en l'air
     private detectGround _detectGround;
     private CustomInput _input = null;
     private Vector2 _moveVector = Vector2.zero;
@@ -19,26 +17,30 @@ public class moveCharacter : MonoBehaviour
 
     [SerializeField] float _speed;
     [SerializeField] float _maxSpeed;
-
+    [SerializeField] private float _jumpForce;
+    [SerializeField] addforce _af;
+    private Vector2 _projectileDirection;
+    private Vector2 _mousePos;
+    private Camera _camera;
 
     private void Awake()
     {
-        transform.position = Vector2.zero;
+        transform.position = new Vector3(-8.625f, 0);
         _detectGround = GameObject.Find("raycast").GetComponent<detectGround>();
         _input = new CustomInput();
+        _camera = Camera.main;
     }
 
     private void FixedUpdate()
     {
+
         if (_moveVector != Vector2.zero)
         {
             _direction += _moveVector;
         }
 
         _direction *= deceleration;
-        _rigidbody.velocity = _speed * Time.deltaTime * _direction;
-        //_rigidbody.gravityScale = _detectGround.isOnGround() ? graviteAuSol : graviteEnAir;
-
+        _rigidbody.velocity += new Vector2(_speed * Time.deltaTime * _direction.x - _rigidbody.velocity.x, 0);
     }
 
     private void OnEnable()
@@ -67,10 +69,33 @@ public class moveCharacter : MonoBehaviour
 
     public void jump(InputAction.CallbackContext context)
     {
-        if (_detectGround.isOnGround() && context.phase == InputActionPhase.Canceled)
+        if (_detectGround.isOnGround() && context.phase == InputActionPhase.Performed)
         {
-            _rigidbody.AddForce(Vector2.up * 1000000, ForceMode2D.Impulse);
+            _rigidbody.velocity += Vector2.up*_jumpForce;
         }
     }
 
+    public void gatherDirection(InputAction.CallbackContext context)
+    {
+        _projectileDirection = context.ReadValue<Vector2>();
+    }
+
+    public Vector2 getDirection()
+    {
+        return _projectileDirection;
+    }
+
+
+
+    public void mousePos(InputAction.CallbackContext ctx)
+    {
+        _mousePos = ctx.ReadValue<Vector2>();
+        _mousePos = _camera.ScreenToWorldPoint(_mousePos);
+        print(_mousePos);
+    }
+
+    public Vector2 getMousePos()
+    {
+        return _mousePos;
+    }
 }

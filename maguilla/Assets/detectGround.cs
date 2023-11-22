@@ -12,6 +12,11 @@ public class detectGround : MonoBehaviour
         OnGround = true;
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        OnGround = true;
+    }
+
     void OnTriggerExit2D(Collider2D other)
     {
         OnGround = false;
