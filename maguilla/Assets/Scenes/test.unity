@@ -752,7 +752,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9656fbb11449024b9100338c49b7324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectile: {fileID: 208242083891426263, guid: 4f605b54fd1e6e443bf26be860fe253a, type: 3}
+  _projectile: {fileID: 208242083891426263, guid: 6fda6611cfcb6f642a63694a2264ca9c, type: 3}
+  _target: {fileID: 1212378314}
+  HauteurMax: 1
+  _masseBall: 1
+  _g: 1
 --- !u!1 &505510374
 GameObject:
   m_ObjectHideFlags: 0

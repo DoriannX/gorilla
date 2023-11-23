@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using FixedUpdate = UnityEngine.PlayerLoop.FixedUpdate;
 
 public class moveCharacter : MonoBehaviour
 {
@@ -91,7 +86,6 @@ public class moveCharacter : MonoBehaviour
     {
         _mousePos = ctx.ReadValue<Vector2>();
         _mousePos = _camera.ScreenToWorldPoint(_mousePos);
-        print(_mousePos);
     }
 
     public Vector2 getMousePos()

@@ -5,26 +5,26 @@ using UnityEngine;
 
 public class detectGround : MonoBehaviour
 {
-    private bool OnGround = false;
+    private bool _onGround = false;
     
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        OnGround = true;
+        _onGround = true;
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        OnGround = true;
+        _onGround = true;
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        OnGround = false;
+        _onGround = false;
     }
 
     public bool isOnGround()
     {
-        return OnGround;
+        return _onGround;
     }
 
 }
