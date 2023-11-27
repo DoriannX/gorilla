@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class shoot : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class shoot : MonoBehaviour
     [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _trajectoryDot;
     [SerializeField] private GameObject _trajectory;
+    [SerializeField] private float _wind;
 
     private Rigidbody2D _rbProjectile;
     private bool _shootingController = false;
@@ -30,7 +32,9 @@ public class shoot : MonoBehaviour
         _timer = 0;
         _positionBullet = _transform.position;
         _previousPositionBullet = _positionBullet;
-        _acceleration = new Vector2(0, -9.80665f);
+        _acceleration = new Vector2(_wind, -9.80665f);
+        _wind = Random.Range(-15, 15);
+        print(_wind);
         for (int i = 0; i < 100; i++)
         {
             _trajectoryDots[i] = Instantiate(_trajectoryDot, _positionBullet, Quaternion.identity, _trajectory.transform);
@@ -46,6 +50,7 @@ public class shoot : MonoBehaviour
 
     private void FixedUpdate()
     {
+        _acceleration.x = _wind;
         Loop();
     }
 
@@ -126,5 +131,10 @@ public class shoot : MonoBehaviour
     public bool getShooting()
     {
         return _shootingController;
+    }
+
+    public float Wind()
+    {
+        return _wind;
     }
 }

@@ -6,47 +6,38 @@ public class shootIA : MonoBehaviour
     private float _timer = 0;
     [SerializeField] private GameObject _projectile;
     [SerializeField] private GameObject _target;
-    [SerializeField] private float minRange;
-    [SerializeField] private float maxRange;
+    [SerializeField] private float _minRange;
+    [SerializeField] private float _maxRange;
     private Transform _transform;
 
-    private float _angle;
-    private float _angle2;
-    private float _angle3;
-    private float _angle4;
-    private float _force;
-    private float _force2;
-    private float _force3;
-    private float _force4;
+    private float _angle = 270;
+    private float _angle2 = 270 - 45;
+    private float _angle3 = 270 - 45 * 2;
+    private float _angle4 = 270-45 * 3;
+    private float _force, _force2, _force3, _force4 = 0;
 
 
     private Vector2 _previousPositionBullet;
     private Vector2 _positionBullet;
     private Vector2 _acceleration = new Vector2(0, -9.80665f);
     private Vector2 _speedV;
-    private float _iteration;
     private bool _notFound = false;
     private Coroutine _coroutine;
     private Vector2 vSpawn = Vector2.zero;
     private bool _shot = false;
     private moveIA mIA;
+    private float _wind;
     private void Awake()
     {
+        _wind = GameObject.Find("shooter").GetComponent<shoot>().Wind();
         _transform = transform;
         _positionBullet = _transform.position;
-        _iteration = 100;
-        _angle = 270;
-        _angle2 = 270-45;
-        _angle3 = 270-45*2;
-        _angle4 = 270-45*3;
-        _force = 1;
-        _force2 = 1;
-        _force3 = 1;
-        _force4 = 1;
         mIA = GameObject.Find("IA").GetComponent<moveIA>();
     }
     private void FixedUpdate()
     {
+        _wind = GameObject.Find("shooter").GetComponent<shoot>().Wind();
+        _acceleration.x = _wind;
         if (_timer < 3) 
         {
             _timer += Time.deltaTime;
@@ -126,7 +117,6 @@ public class shootIA : MonoBehaviour
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
                 _ball.GetComponent<Rigidbody2D>().velocity = vSpawn;
-                _iteration = 100;
 
                 _angle = 270;
                 _force = 0;
@@ -135,7 +125,6 @@ public class shootIA : MonoBehaviour
             }
         }
 
-        _iteration -= 1;
         return false;
     }*/
 
@@ -181,7 +170,7 @@ public class shootIA : MonoBehaviour
             if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
-                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle4 + Random.Range(minRange, maxRange)) * Mathf.Deg2Rad) * (_force4 + Random.Range(minRange, maxRange)) * 1.01f, Mathf.Sin((_angle4 + Random.Range(minRange, maxRange)) * Mathf.Deg2Rad) * (_force4 + Random.Range(minRange, maxRange)) * 1.01f) ;
+                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle4 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force4 + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((_angle4 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force4 + Random.Range(_minRange, _maxRange)) * 1.01f) ;
                 _shot = true;
 
                 _angle4 = 180;
@@ -235,9 +224,8 @@ public class shootIA : MonoBehaviour
             if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
-                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle3 + Random.Range(minRange, maxRange)) * Mathf.Deg2Rad) * (_force3 + Random.Range(minRange, maxRange)) * 1.01f, Mathf.Sin((_angle3 + Random.Range(minRange, maxRange)) * Mathf.Deg2Rad) * (_force3 + Random.Range(minRange, maxRange)) * 1.01f);
+                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle3 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force3 + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((_angle3 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force3 + Random.Range(_minRange, _maxRange)) * 1.01f);
                 _shot = true;
-                _iteration = 100;
 
                 _angle3 = 180;
                 _force3 = 0;
@@ -290,9 +278,8 @@ public class shootIA : MonoBehaviour
             if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
-                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle2 + Random.Range(minRange, maxRange)) * Mathf.Deg2Rad) * (_force2 + Random.Range(minRange, maxRange)) * 1.01f, Mathf.Sin((_angle2 + Random.Range(minRange, maxRange)) * Mathf.Deg2Rad) * (_force2 + Random.Range(minRange, maxRange)) * 1.01f);
+                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle2 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force2 + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((_angle2 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force2 + Random.Range(_minRange, _maxRange)) * 1.01f);
                 _shot = true;
-                _iteration = 100;
 
                 _angle2 = 180;
                 _force2 = 0;
@@ -346,8 +333,7 @@ public class shootIA : MonoBehaviour
             if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
-                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle + Random.Range(minRange, maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(minRange, maxRange)) * 1.01f, Mathf.Sin((_angle + Random.Range(minRange, maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(minRange, maxRange)) * 1.01f);
-                _iteration = 100;
+                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((_angle + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(_minRange, _maxRange)) * 1.01f);
                 _shot = true;
 
                 _angle = 270;

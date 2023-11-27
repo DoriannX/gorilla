@@ -833,8 +833,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _projectile: {fileID: 208242083891426263, guid: 4f605b54fd1e6e443bf26be860fe253a, type: 3}
   _target: {fileID: 62980148}
-  minRange: -5
-  maxRange: 5
+  _minRange: -1
+  _maxRange: 1
 --- !u!1 &505510374
 GameObject:
   m_ObjectHideFlags: 0
@@ -1566,6 +1566,7 @@ MonoBehaviour:
   _player: {fileID: 62980148}
   _trajectoryDot: {fileID: 7222243915635441429, guid: 627623cdb761a464eaa27c525e281c27, type: 3}
   _trajectory: {fileID: 873703436}
+  _wind: 15
 --- !u!1 &1244539243
 GameObject:
   m_ObjectHideFlags: 0
