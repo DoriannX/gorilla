@@ -14,7 +14,6 @@ public class detectPlayer : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        print(other.name);
         if (GetComponent<destroy>().is_landed())
         {
             if (other.transform.position.x - _transform.position.x <= .5f &&
