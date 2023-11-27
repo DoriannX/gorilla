@@ -7,13 +7,12 @@ public class moveCharacter : MonoBehaviour
     private CustomInput _input = null;
     private Vector2 _moveVector = Vector2.zero;
     private Vector2 _direction = Vector2.zero;
-    [SerializeField] float deceleration = 0;
+    [SerializeField] float deceleration = .9f;
     [SerializeField] Rigidbody2D _rigidbody;
 
     [SerializeField] float _speed;
     [SerializeField] float _maxSpeed;
     [SerializeField] private float _jumpForce;
-    [SerializeField] addforce _af;
     private Vector2 _projectileDirection;
     private Vector2 _mousePos;
     private Camera _camera;
@@ -79,8 +78,6 @@ public class moveCharacter : MonoBehaviour
     {
         return _projectileDirection;
     }
-
-
 
     public void mousePos(InputAction.CallbackContext ctx)
     {
