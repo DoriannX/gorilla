@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 58866230}
   m_Layer: 0
   m_Name: map
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -265,6 +265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 62980150}
+  - component: {fileID: 62980155}
   - component: {fileID: 62980153}
   - component: {fileID: 62980149}
   - component: {fileID: 62980152}
@@ -527,6 +528,18 @@ MonoBehaviour:
   m_DefaultActionMap: player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &62980155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62980148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9440f64f7412a4fac545e9a59fe66f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &143091076
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +553,7 @@ GameObject:
   - component: {fileID: 143091078}
   m_Layer: 0
   m_Name: map1 (2)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -670,7 +683,7 @@ GameObject:
   - component: {fileID: 156816729}
   m_Layer: 0
   m_Name: map1 (1)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -848,7 +861,7 @@ GameObject:
   - component: {fileID: 505510376}
   m_Layer: 0
   m_Name: map1 (8)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -978,7 +991,7 @@ GameObject:
   - component: {fileID: 558286636}
   m_Layer: 0
   m_Name: map1 (3)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1321,7 +1334,7 @@ GameObject:
   - component: {fileID: 969659442}
   m_Layer: 0
   m_Name: map1
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1438,6 +1451,121 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1032559281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1032559282}
+  - component: {fileID: 1032559284}
+  - component: {fileID: 1032559283}
+  m_Layer: 0
+  m_Name: levelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1032559282
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032559281}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1032559283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032559281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 0898def44e8c182499951fc55063253b, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a19c5093-9d49-4bfb-a462-513fe20af5e7
+    m_ActionName: player/Movement[/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4fc52160-a5ba-4e0b-98ef-a8a75798ab27
+    m_ActionName: player/jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 24c172e6-e10c-41e4-91a0-12bfab6f8cde
+    m_ActionName: player/shoot[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 804a6a5e-340d-493c-80f2-59e0eef61878
+    m_ActionName: player/shootManette
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e0a1a408-ad3b-41fc-a1c4-08c52bb9fe7d
+    m_ActionName: player/directionshoot
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 81e8f70b-2d7e-48da-8afa-3bf35a30d345
+    m_ActionName: player/directionShootMouse[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1032559284}
+        m_TargetAssemblyTypeName: levelManager, Assembly-CSharp
+        m_MethodName: restart
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ed294132-65f3-481c-aae9-5947e8fbd38e
+    m_ActionName: player/close[/Keyboard/escape]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &1032559284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032559281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7dee90311150f43b8f8022127a2e80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1212378314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1544,6 +1672,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 81e8f70b-2d7e-48da-8afa-3bf35a30d345
     m_ActionName: player/directionShootMouse[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ed294132-65f3-481c-aae9-5947e8fbd38e
+    m_ActionName: player/close[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: player
@@ -1580,7 +1712,7 @@ GameObject:
   - component: {fileID: 1244539245}
   m_Layer: 0
   m_Name: map1 (4)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1710,7 +1842,7 @@ GameObject:
   - component: {fileID: 1617343410}
   m_Layer: 0
   m_Name: map1 (6)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1840,7 +1972,7 @@ GameObject:
   - component: {fileID: 1621376554}
   m_Layer: 0
   m_Name: map1 (5)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1970,7 +2102,7 @@ GameObject:
   - component: {fileID: 1972551442}
   m_Layer: 0
   m_Name: map1 (7)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2096,6 +2228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1999837768}
+  - component: {fileID: 1999837770}
   - component: {fileID: 1999837769}
   - component: {fileID: 1999837766}
   - component: {fileID: 1999837765}
@@ -2253,6 +2386,18 @@ MonoBehaviour:
   _deceleration: 0.9
   _speed: 0.3
   _jumpForce: 25
+--- !u!114 &1999837770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999837762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8ef7e0bec2bb6a4199d04a26caf4086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2262,3 +2407,4 @@ SceneRoots:
   - {fileID: 58866229}
   - {fileID: 1999837768}
   - {fileID: 873703437}
+  - {fileID: 1032559282}

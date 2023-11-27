@@ -12,11 +12,13 @@ public class detectWall : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if(other.tag == "wall")
         _wallInFront = true;
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        _wallInFront = false;
+        if (other.tag == "wall")
+            _wallInFront = false;
     }
 
     public bool is_wall_in_front()

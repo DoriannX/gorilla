@@ -36,7 +36,8 @@ public class shootIA : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        _wind = GameObject.Find("shooter").GetComponent<shoot>().Wind();
+        GameObject.Find("shooter").TryGetComponent<shoot>(out shoot temp);
+        _wind = temp.Wind();
         _acceleration.x = _wind;
         if (_timer < 3) 
         {
@@ -47,7 +48,6 @@ public class shootIA : MonoBehaviour
             _previousPositionBullet = _transform.position;
             _speedV.x = Mathf.Cos(_angle * Mathf.Deg2Rad) * _force;
             _speedV.y = Mathf.Sin(_angle * Mathf.Deg2Rad) * _force;
-            print(!mIA.is_move());
             if (!mIA.is_move())
             {
                 for (int i = 0; i < 50; i++)
@@ -79,54 +79,6 @@ public class shootIA : MonoBehaviour
 
         }
     }
-    /*private bool Loop()
-    {
-
-        _angle -= 0.05f;
-        if(_angle <= 90)
-        {
-            _force++;
-            _angle = 270;
-        }
-
-        _positionBullet = _transform.position;
-        var vSpawn = new Vector2(Mathf.Cos((_angle) * Mathf.Deg2Rad), Mathf.Sin((_angle) * Mathf.Deg2Rad)) * _force * 1.01f;
-        _speedV = vSpawn;
-        for (int i = 0; i < 400; i++)
-        {
-            Debug.DrawLine(_previousPositionBullet, _positionBullet, Color.blue);
-            _previousPositionBullet = _positionBullet;
-            _speedV += _acceleration * Time.fixedDeltaTime;
-            _positionBullet += _speedV * Time.fixedDeltaTime;
-
-            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
-                new Vector2(Mathf.Cos(_angle * Mathf.Deg2Rad), Mathf.Sin(_angle * Mathf.Deg2Rad)));
-
-            if (_positionBullet.y < -5)
-            {
-                return false;
-            }
-            foreach (var raycast in _raycast)
-            {
-                if (raycast.collider.GetComponent<BoxCollider2D>() != null)
-                {
-                    return false;
-                }
-            }
-            if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet))
-            {
-                var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
-                _ball.GetComponent<Rigidbody2D>().velocity = vSpawn;
-
-                _angle = 270;
-                _force = 0;
-                _timer = 0;
-                return true;
-            }
-        }
-
-        return false;
-    }*/
 
     IEnumerator Search_4()
     {
@@ -345,56 +297,6 @@ public class shootIA : MonoBehaviour
         }
         yield return null;
     }
-
-    /*private bool Search()
-    {
-        _force = (_force < 15) ? _force + .00095f : _force;
-        _angle = (_angle >= 90) ? _angle -= 0.01f : _angle;
-        if (_force >= 15 && _angle <= 90)
-        {
-            _notFound = true;
-        }
-
-        _positionBullet = _transform.position;
-        var vSpawn = new Vector2(Mathf.Cos((_angle) * Mathf.Deg2Rad), Mathf.Sin((_angle) * Mathf.Deg2Rad)) * _force * 1.01f;
-        _speedV = vSpawn;
-        for (int i = 0; i < 400; i++)
-        {
-            Debug.DrawLine(_previousPositionBullet, _positionBullet, Color.blue);
-            _previousPositionBullet = _positionBullet;
-            _speedV += _acceleration * Time.fixedDeltaTime;
-            _positionBullet += _speedV * Time.fixedDeltaTime;
-
-            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
-                new Vector2(Mathf.Cos(_angle * Mathf.Deg2Rad), Mathf.Sin(_angle * Mathf.Deg2Rad)));
-
-            if (_positionBullet.y < -5)
-            {
-                return false;
-            }
-            foreach (var raycast in _raycast)
-            {
-                if (raycast.collider.GetComponent<BoxCollider2D>() != null)
-                {
-                    return false;
-                }
-            }
-            if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet))
-            {
-                var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
-                _ball.GetComponent<Rigidbody2D>().velocity = vSpawn;
-
-                _iteration = 100;
-
-                _angle = 270;
-                _force = 1;
-                _timer = 0;
-                return true;
-            }
-        }
-        return false;
-    }*/
-
 
     public bool is_not_found()
     {
