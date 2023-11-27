@@ -6,6 +6,7 @@ public class destroy : MonoBehaviour
     private float _timer = 0;
     private GameObject _shooter;
     private shootIA _sIA;
+    private bool _landed = false;
     private void Awake()
     {
        _transform = transform;
@@ -17,7 +18,7 @@ public class destroy : MonoBehaviour
     {
         if (_timer >= 5)
         {
-            Destroy(gameObject);
+            _landed = true;
             _sIA.reset_shot();
             _timer = 0;
         }
@@ -31,8 +32,13 @@ public class destroy : MonoBehaviour
     {
         if (other.gameObject.GetComponent<CapsuleCollider2D>() != null)
         {
-            Destroy(gameObject);
+            _landed = true;
             _sIA.reset_shot();
         }
+    }
+
+    public bool is_landed()
+    {
+        return _landed;
     }
 }
