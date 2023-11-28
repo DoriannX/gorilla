@@ -8,6 +8,8 @@ public class shootIA : MonoBehaviour
     [SerializeField] private GameObject _target;
     [SerializeField] private float _minRange;
     [SerializeField] private float _maxRange;
+    [SerializeField] private float _maxForce;
+    [SerializeField] private float _stepForce;
     private Transform _transform;
 
     private float _angle = 270;
@@ -50,7 +52,7 @@ public class shootIA : MonoBehaviour
             {
                 for (int i = 0; i < 50; i++)
                 {
-                    if (_force >= 15 && _force2 >= 15 && _force3 >= 15 && _force4 >= 15)
+                    if (_force >= _maxForce && _force2 >= _maxForce && _force3 >= _maxForce && _force4 >= _maxForce)
                     {
                         _force = _force2 = _force3 = _force4 = 0;
                         _notFound = true;
@@ -62,10 +64,10 @@ public class shootIA : MonoBehaviour
                         _angle2 = 270 - 45;
                         _angle3 = 270 - 45 * 2;
                         _angle4 = 270 - 45 * 3;
-                        _force = 1;
-                        _force2 = 1;
-                        _force3 = 1;
-                        _force4 = 1;
+                        _force = 0;
+                        _force2 = 0;
+                        _force3 = 0;
+                        _force4 = 0;
                         break;
                     }
                     StartCoroutine(Search_1());
@@ -83,11 +85,11 @@ public class shootIA : MonoBehaviour
         _angle4 -= 0.1f;
         if (_angle4 <= 270-45*4)
         {
-            _force4++;
+            _force4 += _stepForce;
             _angle4 = 270-45*3;
         }
 
-        if (_force4 >= 15)
+        if (_force4 >= _maxForce)
         {
             yield break;
         }
@@ -104,7 +106,7 @@ public class shootIA : MonoBehaviour
             _positionBullet += _speedV * Time.fixedDeltaTime;
 
             RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.4f,
-                new Vector2(Mathf.Cos(_angle4 * Mathf.Deg2Rad), Mathf.Sin(_angle4 * Mathf.Deg2Rad)));
+                Vector2.zero);
 
             if (_positionBullet.y < -5)
             {
@@ -112,7 +114,7 @@ public class shootIA : MonoBehaviour
             }
             foreach (var raycast in _raycast)
             {
-                if (raycast.collider.GetComponent<BoxCollider2D>() != null && raycast.collider.GetComponent<CapsuleCollider2D>() == null)
+                if (raycast.collider.tag == "wall")
                 {
                     yield break;
                 }
@@ -137,11 +139,11 @@ public class shootIA : MonoBehaviour
         _angle3 -= 0.1f;
         if (_angle3 <= 270-45*3)
         {
-            _force3++;
+            _force3 += _stepForce;
             _angle3 = 270-45*2;
         }
 
-        if (_force3 >= 15)
+        if (_force3 >= _maxForce)
         {
             yield break;
         }
@@ -158,7 +160,7 @@ public class shootIA : MonoBehaviour
             _positionBullet += _speedV * Time.fixedDeltaTime;
 
             RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.4f,
-                new Vector2(Mathf.Cos(_angle3 * Mathf.Deg2Rad), Mathf.Sin(_angle3 * Mathf.Deg2Rad)));
+                Vector2.zero);
 
             if (_positionBullet.y < -5)
             {
@@ -166,7 +168,7 @@ public class shootIA : MonoBehaviour
             }
             foreach (var raycast in _raycast)
             {
-                if (raycast.collider.GetComponent<BoxCollider2D>() != null && raycast.collider.GetComponent<CapsuleCollider2D>() == null)
+                if (raycast.collider.tag == "wall")
                 {
                     yield break;
                 }
@@ -191,11 +193,11 @@ public class shootIA : MonoBehaviour
         _angle2 -= 0.1f;
         if (_angle2 <= 270-45*2)
         {
-            _force2++;
+            _force2 += _stepForce;
             _angle2 = 270-45;
         }
 
-        if (_force2 >= 15)
+        if (_force2 >= _maxForce)
         {
             yield break;
         }
@@ -212,7 +214,7 @@ public class shootIA : MonoBehaviour
             _positionBullet += _speedV * Time.fixedDeltaTime;
 
             RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.4f,
-                new Vector2(Mathf.Cos(_angle2 * Mathf.Deg2Rad), Mathf.Sin(_angle2 * Mathf.Deg2Rad)));
+                Vector2.zero);
 
             if (_positionBullet.y < -5)
             {
@@ -220,7 +222,7 @@ public class shootIA : MonoBehaviour
             }
             foreach (var raycast in _raycast)
             {
-                if (raycast.collider.GetComponent<BoxCollider2D>() != null && raycast.collider.GetComponent<CapsuleCollider2D>() == null)
+                if (raycast.collider.tag == "wall")
                 {
                     yield break;
                 }
@@ -246,11 +248,11 @@ public class shootIA : MonoBehaviour
         _angle -= 0.1f;
         if (_angle <= 270-45)
         {
-            _force++;
+            _force += _stepForce;
             _angle = 270;
         }
 
-        if (_force >= 15)
+        if (_force >= _maxForce)
         {
             yield break;
         }
@@ -266,8 +268,8 @@ public class shootIA : MonoBehaviour
             _speedV += _acceleration * Time.fixedDeltaTime;
             _positionBullet += _speedV * Time.fixedDeltaTime;
 
-            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.4f,
-                new Vector2(Mathf.Cos(_angle * Mathf.Deg2Rad), Mathf.Sin(_angle * Mathf.Deg2Rad)));
+            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
+                Vector2.zero);
 
             if (_positionBullet.y < -5)
             {
@@ -275,7 +277,7 @@ public class shootIA : MonoBehaviour
             }
             foreach (var raycast in _raycast)
             {
-                if (raycast.collider.GetComponent<BoxCollider2D>() != null && raycast.collider.GetComponent<CapsuleCollider2D>() == null)
+                if (raycast.collider.tag == "wall")
                 {
                     yield break;
                 }

@@ -19,7 +19,8 @@ public class IAlifeManager : MonoBehaviour
     {
         if (_life <= 0)
         {
-            Destroy(gameObject);
+            this.enabled = false;
+            Time.timeScale = 0;
         }
     }
 }

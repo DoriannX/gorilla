@@ -16,6 +16,10 @@ public class levelManager : MonoBehaviour
     private playerLifeManager _plm;
     private IAlifeManager _IAlm;
 
+    private void Start()
+    {
+        Time.timeScale = 1.0f;
+    }
     private void Awake()
     {
         _plm = GameObject.Find("player").GetComponent<playerLifeManager>();

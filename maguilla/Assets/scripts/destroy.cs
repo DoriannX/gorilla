@@ -30,17 +30,23 @@ public class destroy : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.GetComponent<CapsuleCollider2D>() != null)
+        if (other.gameObject.name == "player")
         {
             _landed = true;
             if (other.gameObject.TryGetComponent<playerLifeManager>(out playerLifeManager temp)) temp.hit(20);
+            
+            _sIA.reset_shot();
+        }
+
+        if (other.gameObject.name == "IA")
+        {
             if (other.gameObject.TryGetComponent<IAlifeManager>(out IAlifeManager tempIA))
             {
-                print(other.gameObject.name);
+                _landed = true;
                 tempIA.hit(20);
                 GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                _sIA.reset_shot();
             }
-            _sIA.reset_shot();
         }
     }
 
