@@ -9,7 +9,6 @@ public class IAlifeManager : MonoBehaviour
     public void hit(float damage)
     {
         _life -= damage;
-        print(_life);
     }
     public float Life()
     {

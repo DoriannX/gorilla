@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -23,12 +24,13 @@ public class shoot : MonoBehaviour
     private Vector2 _speedV;
     private Vector2 _acceleration;
     private GameObject[] _trajectoryDots = new GameObject[100];
+    private Mouse mouse;
     private void Awake()
     {
         _rbProjectile = _projectile.GetComponent<Rigidbody2D>();
         _transform = transform;
         _mc = _player.GetComponent<moveCharacter>();
-        _direction = Vector2.one;
+        _direction = Vector2.zero;
         _timer = 0;
         _positionBullet = _transform.position;
         _previousPositionBullet = _positionBullet;
@@ -40,6 +42,7 @@ public class shoot : MonoBehaviour
             _trajectoryDots[i] = Instantiate(_trajectoryDot, _positionBullet, Quaternion.identity, _trajectory.transform);
             _trajectoryDots[i].SetActive(true);
         }
+        mouse = Mouse.current;
 
     }
 
@@ -57,16 +60,14 @@ public class shoot : MonoBehaviour
     private bool Loop()
     {
         
-        _direction = _mc.getMousePos() - (Vector2)_transform.position;
-        _direction.x = Mathf.Clamp(_direction.x, 0, Single.PositiveInfinity);
-        _direction.y = Mathf.Clamp(_direction.y, 0, Single.PositiveInfinity);
+        _direction += mouse.delta.ReadValue() * 0.1f;
         var vSpawn = _direction;
 ;
         _speedV = vSpawn * _force;
 
         _positionBullet = _transform.position;
         _previousPositionBullet = _positionBullet;
-        for (int i = 0; i < 400; i++)
+        for (int i = 0; i < 50; i++)
         {
             _previousPositionBullet = _positionBullet;
             _speedV += _acceleration * Time.fixedDeltaTime;
@@ -74,14 +75,15 @@ public class shoot : MonoBehaviour
             _trajectoryDots[i/4].SetActive(true);
             _trajectoryDots[i/4].transform.position = _positionBullet;
 
-            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
-                _mc.getMousePos() - (Vector2)_transform.position);
-
+            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.1f, Vector2.zero);
+            
             foreach (var raycast in _raycast)
             {
-                if (raycast.collider.GetComponent<BoxCollider2D>() != null)
+                if (raycast.collider.gameObject.tag == "wall")
                 {
-                    for(int j = i/4; j < _trajectoryDots.Length; j++)
+
+                    DrawCircleRaycast(_positionBullet);
+                    for (int j = i/4; j < _trajectoryDots.Length; j++)
                     {
                         _trajectoryDots[j].SetActive(false);
                     }
@@ -93,14 +95,30 @@ public class shoot : MonoBehaviour
         return false;
     }
 
+    public float radius = 0.1f; // Le rayon du cercle
+    public int numRays = 360; // Le nombre de rayons à dessiner
+
+    // Dessine un cercle de rayons et renvoie tous les objets touchés
+    public void DrawCircleRaycast(Vector2 center)
+    {
+
+        for (int i = 0; i < numRays; i++)
+        {
+            float angle = (float)i / numRays * 360f; // Calcule l'angle pour ce rayon
+            Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right; // Calcule la direction du rayon
+
+                // Dessine une ligne du centre du cercle dans la direction du rayon
+            Debug.DrawRay(center, direction * radius, Color.green);
+        }
+
+    }
+
     public void ShootPerformed(InputAction.CallbackContext ctx)
     {
         if (ctx.performed && _timer >= 3)
         {
             var projectile = Instantiate(_projectile, _transform.position, Quaternion.identity);
-            _direction = _mc.getMousePos() - (Vector2)_transform.position;
-            _direction.x = Mathf.Clamp(_direction.x, 0, Single.PositiveInfinity);
-            _direction.y = Mathf.Clamp(_direction.y, 0, Single.PositiveInfinity);
+            _direction += mouse.delta.ReadValue();
             projectile.GetComponent<Rigidbody2D>().velocity += _direction * _force;
             _timer = 0;
 

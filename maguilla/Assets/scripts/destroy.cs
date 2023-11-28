@@ -7,6 +7,7 @@ public class destroy : MonoBehaviour
     private GameObject _shooter;
     private shootIA _sIA;
     private bool _landed = false;
+    [SerializeField] private ParticleSystem _particleSystem;
     private void Awake()
     {
        _transform = transform;
@@ -19,6 +20,7 @@ public class destroy : MonoBehaviour
         if (_timer >= 5)
         {
             _landed = true;
+            Instantiate(_particleSystem, _transform.position, Quaternion.identity);
             _sIA.reset_shot();
             _timer = 0;
         }
@@ -32,7 +34,8 @@ public class destroy : MonoBehaviour
     {
         if (other.gameObject.GetComponent<CapsuleCollider2D>() != null)
         {
-            _landed = true;
+            _landed = true; 
+            Instantiate(_particleSystem, _transform.position, Quaternion.identity);
             _sIA.reset_shot();
         }
     }
