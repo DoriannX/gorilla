@@ -30,7 +30,7 @@ public class shoot : MonoBehaviour
         _rbProjectile = _projectile.GetComponent<Rigidbody2D>();
         _transform = transform;
         _mc = _player.GetComponent<moveCharacter>();
-        _direction = Vector2.one;
+        _direction = Vector2.zero;
         _timer = 0;
         _positionBullet = _transform.position;
         _previousPositionBullet = _positionBullet;
@@ -61,8 +61,6 @@ public class shoot : MonoBehaviour
     {
         
         _direction += mouse.delta.ReadValue() * 0.1f;
-        _direction.x = Mathf.Clamp(_direction.x, 0, Single.PositiveInfinity);
-        _direction.y = Mathf.Clamp(_direction.y, 0, Single.PositiveInfinity);
         var vSpawn = _direction;
 ;
         _speedV = vSpawn * _force;
@@ -77,17 +75,18 @@ public class shoot : MonoBehaviour
             _trajectoryDots[i/4].SetActive(true);
             _trajectoryDots[i/4].transform.position = _positionBullet;
 
-            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.11f, _previousPositionBullet - _positionBullet);
+            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.1f, Vector2.zero);
             
             foreach (var raycast in _raycast)
             {
-                if (raycast.collider.GetComponent<BoxCollider2D>() != null && raycast.collider.gameObject.tag == "wall")
+                if (raycast.collider.gameObject.tag == "wall")
                 {
-                    for(int j = i/4; j < _trajectoryDots.Length; j++)
+
+                    DrawCircleRaycast(_positionBullet);
+                    for (int j = i/4; j < _trajectoryDots.Length; j++)
                     {
                         _trajectoryDots[j].SetActive(false);
                     }
-                    DrawCircleRaycast(_positionBullet);
                     return false;
                 }
             }
@@ -100,21 +99,18 @@ public class shoot : MonoBehaviour
     public int numRays = 360; // Le nombre de rayons à dessiner
 
     // Dessine un cercle de rayons et renvoie tous les objets touchés
-    public List<RaycastHit2D> DrawCircleRaycast(Vector2 center)
+    public void DrawCircleRaycast(Vector2 center)
     {
-        List<RaycastHit2D> hits = new List<RaycastHit2D>(); // Liste pour stocker les objets touchés
 
         for (int i = 0; i < numRays; i++)
         {
             float angle = (float)i / numRays * 360f; // Calcule l'angle pour ce rayon
             Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right; // Calcule la direction du rayon
 
-            RaycastHit2D hit = Physics2D.CircleCast(center, radius, direction); // Effectue le rayon
                 // Dessine une ligne du centre du cercle dans la direction du rayon
             Debug.DrawRay(center, direction * radius, Color.green);
         }
 
-        return hits; // Renvoie la liste des objets touchés
     }
 
     public void ShootPerformed(InputAction.CallbackContext ctx)
@@ -122,10 +118,7 @@ public class shoot : MonoBehaviour
         if (ctx.performed && _timer >= 3)
         {
             var projectile = Instantiate(_projectile, _transform.position, Quaternion.identity);
-            print(mouse.delta.ReadValue());
             _direction += mouse.delta.ReadValue();
-            _direction.x = Mathf.Clamp(_direction.x, 0, Single.PositiveInfinity);
-            _direction.y = Mathf.Clamp(_direction.y, 0, Single.PositiveInfinity);
             projectile.GetComponent<Rigidbody2D>().velocity += _direction * _force;
             _timer = 0;
 

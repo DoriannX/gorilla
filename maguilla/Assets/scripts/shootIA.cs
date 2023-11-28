@@ -26,18 +26,16 @@ public class shootIA : MonoBehaviour
     private Vector2 vSpawn = Vector2.zero;
     private bool _shot = false;
     private moveIA mIA;
-    private float _wind;
+    private float _wind = 0;
     private void Awake()
     {
-        _wind = GameObject.Find("shooter").GetComponent<shoot>().Wind();
         _transform = transform;
         _positionBullet = _transform.position;
         mIA = GameObject.Find("IA").GetComponent<moveIA>();
     }
     private void FixedUpdate()
     {
-        GameObject.Find("shooter").TryGetComponent<shoot>(out shoot temp);
-        _wind = temp.Wind();
+        if (GameObject.Find("shooter") != null) if (GameObject.Find("shooter").TryGetComponent<shoot>(out shoot temp)) _wind = temp.Wind();
         _acceleration.x = _wind;
         if (_timer < 3) 
         {
