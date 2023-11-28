@@ -12,6 +12,8 @@ public class moveIA : MonoBehaviour
     private Rigidbody2D _rb;
     private float _timer = 0;
     private bool _move = false;
+    private bool _moveLeft = false;
+    private Transform _transform;
 
     private void Awake()
     {
@@ -19,10 +21,11 @@ public class moveIA : MonoBehaviour
         _sIA = GetComponentInChildren<shootIA>();
         _rb = GetComponent<Rigidbody2D>();
         _dw = GetComponentInChildren<detectWall>();
+        _transform = transform;
     }
     private void Update()
     {
-        if (_sIA.is_not_found()) _move = true;
+        if (_sIA.is_not_found()) _move = _moveLeft = true;
 
         _direction *= _deceleration;
 
@@ -32,7 +35,30 @@ public class moveIA : MonoBehaviour
         {
             if (_timer < 1)
             {
-                _direction += Vector3.left;
+                if (_moveLeft)
+                {
+                    if(_transform.position.y > -11.5)
+                    {
+                        _direction += Vector3.left;
+                    }
+                    else
+                    {
+                        _timer = 0;
+                        _moveLeft = false;
+                    }
+                }
+                else
+                {
+                    if (_transform.position.y < 11.5)
+                    {
+                        _direction -= Vector3.left;
+                    }
+                    else
+                    {
+                        _timer = 0;
+                        _moveLeft = true;
+                    }
+                }
                 _timer += Time.deltaTime;
             }
             else
@@ -46,6 +72,7 @@ public class moveIA : MonoBehaviour
         if (_dw.is_wall_in_front())
         {
             _timer = 0;
+            _move = true;
             _rb.velocity += Vector2.up * _jumpForce;
             _dw.set_wall_in_front(false);
         }
@@ -54,5 +81,11 @@ public class moveIA : MonoBehaviour
     public bool is_move()
     {
         return _move;
+    }
+
+    public void Move(bool left)
+    {
+        _move = true;
+        _moveLeft = left;
     }
 }
