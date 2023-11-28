@@ -61,6 +61,8 @@ public class shoot : MonoBehaviour
     {
         
         _direction += mouse.delta.ReadValue() * 0.1f;
+        _direction.x = Mathf.Clamp(_direction.x, 0, Single.PositiveInfinity);
+        _direction.y = Mathf.Clamp(_direction.y, 0, Single.PositiveInfinity);
         var vSpawn = _direction;
 ;
         _speedV = vSpawn * _force;
@@ -106,8 +108,11 @@ public class shoot : MonoBehaviour
         {
             float angle = (float)i / numRays * 360f; // Calcule l'angle pour ce rayon
             Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right; // Calcule la direction du rayon
+            
+            _direction.x = Mathf.Clamp(_direction.x, 0, Single.PositiveInfinity);
+            _direction.y = Mathf.Clamp(_direction.y, 0, Single.PositiveInfinity);
 
-                // Dessine une ligne du centre du cercle dans la direction du rayon
+            // Dessine une ligne du centre du cercle dans la direction du rayon
             Debug.DrawRay(center, direction * radius, Color.green);
         }
 
@@ -119,6 +124,8 @@ public class shoot : MonoBehaviour
         {
             var projectile = Instantiate(_projectile, _transform.position, Quaternion.identity);
             _direction += mouse.delta.ReadValue();
+            _direction.x = Mathf.Clamp(_direction.x, 0, Single.PositiveInfinity);
+            _direction.y = Mathf.Clamp(_direction.y, 0, Single.PositiveInfinity);
             projectile.GetComponent<Rigidbody2D>().velocity += _direction * _force;
             _timer = 0;
 
@@ -131,6 +138,8 @@ public class shoot : MonoBehaviour
         {
             var projectile = Instantiate(_projectile, _transform.position, Quaternion.identity);
             _direction = new Vector2(1, 1);
+            _direction.x = Mathf.Clamp(_direction.x, 0, Single.PositiveInfinity);
+            _direction.y = Mathf.Clamp(_direction.y, 0, Single.PositiveInfinity);
             if (_mc.getDirection() != Vector2.zero)
             {
                 _direction = _mc.getDirection();
