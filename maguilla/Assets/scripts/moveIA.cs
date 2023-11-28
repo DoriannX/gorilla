@@ -69,12 +69,12 @@ public class moveIA : MonoBehaviour
             }
         }
 
-        if (_dw.is_wall_in_front())
+        print(GetComponentInChildren<detectGroundIA>().isOnGround());
+        if (_dw.is_wall_in_front() && GetComponentInChildren<detectGroundIA>().isOnGround())
         {
             _timer = 0;
             _move = true;
             _rb.velocity += Vector2.up * _jumpForce;
-            _dw.set_wall_in_front(false);
         }
     }
 
