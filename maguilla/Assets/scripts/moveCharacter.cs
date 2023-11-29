@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class moveCharacter : MonoBehaviour
@@ -9,6 +11,8 @@ public class moveCharacter : MonoBehaviour
     private Vector2 _direction = Vector2.zero;
     [SerializeField] float deceleration = .9f;
     [SerializeField] Rigidbody2D _rigidbody;
+    [SerializeField] private ParticleSystem _fireJump;
+    [SerializeField] private Image _fireJumpImage;
 
     [SerializeField] float _speed;
     [SerializeField] float _maxSpeed;
@@ -16,10 +20,10 @@ public class moveCharacter : MonoBehaviour
     private Vector2 _projectileDirection;
     private Vector2 _mousePos;
     private Camera _camera;
+    private bool _canJump = true;
 
     private void Awake()
     {
-        transform.position = new Vector3(-8.625f, 0);
         _detectGround = GameObject.Find("raycast").GetComponent<detectGround>();
         _input = new CustomInput();
         _camera = Camera.main;
@@ -35,6 +39,21 @@ public class moveCharacter : MonoBehaviour
 
         _direction *= deceleration;
         _rigidbody.velocity += new Vector2(_speed * Time.deltaTime * _direction.x - _rigidbody.velocity.x, 0);
+    }
+
+    private void Update()
+    {
+        
+
+        if (_canJump)
+        {
+            _fireJump.gameObject.SetActive(true);
+        }
+        else
+        {
+            _fireJump.gameObject.SetActive(false);
+            _fireJumpImage.fillAmount += Time.deltaTime / 3;
+        }
     }
 
     private void OnEnable()
@@ -63,10 +82,19 @@ public class moveCharacter : MonoBehaviour
 
     public void jump(InputAction.CallbackContext context)
     {
-        if (_detectGround.isOnGround() && context.phase == InputActionPhase.Performed)
+        if (_detectGround.isOnGround() && context.phase == InputActionPhase.Performed && _canJump)
         {
             _rigidbody.velocity += Vector2.up*_jumpForce;
+            _canJump = false;
+            _fireJumpImage.fillAmount = 0;
+            StartCoroutine(waitJump());
         }
+    }
+
+    IEnumerator waitJump()
+    {
+        yield return new WaitForSeconds(3);
+        _canJump = true;
     }
 
     public void gatherDirection(InputAction.CallbackContext context)
@@ -88,5 +116,16 @@ public class moveCharacter : MonoBehaviour
     public Vector2 getMousePos()
     {
         return _mousePos;
+    }
+
+    public void disableJump(){
+        _canJump = false;
+        StartCoroutine(canMovEnumerable());
+    }
+
+    IEnumerator canMovEnumerable()
+    {
+        yield return new WaitForSeconds(3);
+        _canJump = true;
     }
 }

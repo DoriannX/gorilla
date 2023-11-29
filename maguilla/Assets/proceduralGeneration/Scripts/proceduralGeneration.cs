@@ -29,7 +29,7 @@ public class NewBehaviourScript : MonoBehaviour
         {
             if (repeatValue == 0)
             {
-                _seed = Random.RandomRange(-1000000, 1000000);
+                _seed = Random.Range(-1000000, 1000000);
                 _height = Mathf.RoundToInt(_heightValue * Mathf.PerlinNoise(x/_smoothness, _seed));
                 GenerateFlatPlatform(x);
                 repeatValue = _repeatNum;

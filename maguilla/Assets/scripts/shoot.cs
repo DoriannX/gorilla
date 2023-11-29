@@ -1,6 +1,6 @@
-using System;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
@@ -13,6 +13,12 @@ public class shoot : MonoBehaviour
     [SerializeField] private GameObject _trajectory;
     [SerializeField] private float _wind;
     [SerializeField] private float forceMax;
+    [SerializeField] private ParticleSystem _fireShoot;
+    [SerializeField] private Image _shotIcon;
+    [SerializeField] private GameObject _leftArrow;
+    [SerializeField] private GameObject _rightArrow;
+    [SerializeField] private TextMeshProUGUI _windText;
+    
 
     private Rigidbody2D _rbProjectile;
     private bool _shootingController = false;
@@ -32,12 +38,11 @@ public class shoot : MonoBehaviour
         _transform = transform;
         _mc = _player.GetComponent<moveCharacter>();
         _direction = Vector2.zero;
-        _timer = 0;
+        _timer = 3;
         _positionBullet = _transform.position;
         _previousPositionBullet = _positionBullet;
         _acceleration = new Vector2(_wind, -9.80665f);
         _wind = Random.Range(-15, 15);
-        print(_wind);
         for (int i = 0; i < 100; i++)
         {
             _trajectoryDots[i] = Instantiate(_trajectoryDot, _positionBullet, Quaternion.identity, _trajectory.transform);
@@ -49,6 +54,32 @@ public class shoot : MonoBehaviour
 
     private void Update()
     {
+        _windText.text = Mathf.Abs(_wind).ToString();
+        if (_wind > 0)
+        {
+            _leftArrow.SetActive(true);
+            _leftArrow.GetComponent<Image>().rectTransform.sizeDelta = new Vector2(100 + Mathf.Abs(_wind * 10), _leftArrow.GetComponent<Image>().rectTransform.sizeDelta.y);
+            _rightArrow.SetActive(false);
+        }else if (_wind < 0)
+        {
+            _rightArrow.SetActive(true);
+            _rightArrow.GetComponent<Image>().rectTransform.sizeDelta = new Vector2(100 + Mathf.Abs(_wind * 10), _leftArrow.GetComponent<Image>().rectTransform.sizeDelta.y);
+            _leftArrow.SetActive(false);
+        }
+        else
+        {
+            _leftArrow.SetActive(false);
+            _leftArrow.SetActive(false);
+        }
+        _shotIcon.fillAmount += Time.deltaTime / 3;
+        if (_timer < 3)
+        {
+            _fireShoot.gameObject.SetActive(false);
+        }
+        else
+        {
+            _fireShoot.gameObject.SetActive(true);
+        }
         _timer += Time.deltaTime;
     }
 
@@ -56,6 +87,12 @@ public class shoot : MonoBehaviour
     {
         _acceleration.x = _wind;
         Loop();
+    }
+
+    public void changeWind()
+    {
+
+        _wind = Random.Range(-15, 15);
     }
 
     private bool Loop()
@@ -70,13 +107,13 @@ public class shoot : MonoBehaviour
 
         _positionBullet = _transform.position;
         _previousPositionBullet = _positionBullet;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 70; i++)
         {
             _previousPositionBullet = _positionBullet;
             _speedV += _acceleration * Time.fixedDeltaTime;
             _positionBullet += _speedV * Time.fixedDeltaTime;
-            _trajectoryDots[i/4].SetActive(true);
-            _trajectoryDots[i/4].transform.position = _positionBullet;
+            _trajectoryDots[i/2].SetActive(true);
+            _trajectoryDots[i/2].transform.position = _positionBullet;
 
             RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.1f, Vector2.zero);
             
@@ -86,7 +123,7 @@ public class shoot : MonoBehaviour
                 {
 
                     DrawCircleRaycast(_positionBullet);
-                    for (int j = i/4; j < _trajectoryDots.Length; j++)
+                    for (int j = i/2; j < _trajectoryDots.Length; j++)
                     {
                         _trajectoryDots[j].SetActive(false);
                     }
@@ -129,7 +166,7 @@ public class shoot : MonoBehaviour
             _direction.y = Mathf.Clamp(_direction.y, -1, forceMax);
             projectile.GetComponent<Rigidbody2D>().velocity += _direction * _force;
             _timer = 0;
-
+            _shotIcon.fillAmount = 0;
         }
     }
 

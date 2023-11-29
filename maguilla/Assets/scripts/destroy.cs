@@ -34,7 +34,7 @@ public class destroy : MonoBehaviour
         {
             _landed = true;
             if (other.gameObject.TryGetComponent<playerLifeManager>(out playerLifeManager temp)) temp.hit(20);
-            
+            GameObject.Find("shooter").GetComponent<shoot>().changeWind();
             _sIA.reset_shot();
         }
 
@@ -45,6 +45,7 @@ public class destroy : MonoBehaviour
                 _landed = true;
                 tempIA.hit(20);
                 GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                GameObject.Find("shooter").GetComponent<shoot>().changeWind();
                 _sIA.reset_shot();
             }
         }

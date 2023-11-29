@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IAlifeManager : MonoBehaviour
 {
     private float _life = 100;
+    [SerializeField] private Slider _slider;
 
     public void hit(float damage)
     {
@@ -17,6 +17,7 @@ public class IAlifeManager : MonoBehaviour
 
     private void Update()
     {
+        _slider.value = Mathf.Lerp(_slider.value, _life, 0.05f);
         if (_life <= 0)
         {
             this.enabled = false;

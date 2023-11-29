@@ -74,6 +74,7 @@ public class moveIA : MonoBehaviour
             _timer = 0;
             _move = true;
             _rb.velocity += Vector2.up * _jumpForce;
+            _rb.velocity = new Vector2(0, Mathf.Clamp(_rb.velocity.y, 0, 25)) ;
         }
     }
 
@@ -87,4 +88,6 @@ public class moveIA : MonoBehaviour
         _move = true;
         _moveLeft = left;
     }
+
+    
 }

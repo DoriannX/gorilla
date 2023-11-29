@@ -1,15 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class levelManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _playerLifeText;
-    [SerializeField] private TextMeshProUGUI _IAlifeText;
 
     private float _playerLife;
     private float _IAlife;
@@ -34,8 +29,6 @@ public class levelManager : MonoBehaviour
         
         _playerLife = _plm.Life();
         _IAlife = _IAlm.Life();
-        _playerLifeText.text = _playerLife.ToString();
-        _IAlifeText.text = _IAlife.ToString();
     }
 
 

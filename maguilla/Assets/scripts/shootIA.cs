@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class shootIA : MonoBehaviour
 {
@@ -39,9 +40,10 @@ public class shootIA : MonoBehaviour
     {
         if (GameObject.Find("shooter") != null) if (GameObject.Find("shooter").TryGetComponent<shoot>(out shoot temp)) _wind = temp.Wind();
         _acceleration.x = _wind;
+        print(_timer);
         if (_timer < 3) 
         {
-            _timer += Time.deltaTime;
+            _timer += Time.fixedDeltaTime;
         }
         else
         {
@@ -50,12 +52,13 @@ public class shootIA : MonoBehaviour
             _speedV.y = Mathf.Sin(_angle * Mathf.Deg2Rad) * _force;
             if (!mIA.is_move())
             {
-                for (int i = 0; i < 50; i++)
+                Coroutine(180);
+                /*for (int i = 0; i < 50; i++)
                 {
                     if (_force >= _maxForce && _force2 >= _maxForce && _force3 >= _maxForce && _force4 >= _maxForce)
                     {
                         _force = _force2 = _force3 = _force4 = 0;
-                        _notFound = true;
+                        
                     }
                     if (_shot)
                     {
@@ -70,14 +73,86 @@ public class shootIA : MonoBehaviour
                         _force4 = 0;
                         break;
                     }
-                    StartCoroutine(Search_1());
+
+                    
+                    /*StartCoroutine(Search_1());
                     StartCoroutine(Search_2());
                     StartCoroutine(Search_3());
-                    StartCoroutine(Search_4());
-                }
+                    StartCoroutine(Search_4());#1#
+                }*/
             }
 
         }
+    }
+    private void Coroutine(int num)
+    {
+        float base_angle = 180 / num;
+        _force += _stepForce;
+
+        if (_force >= _maxForce)
+        {
+            _notFound = true;
+            _force = 0;
+            return;
+        }
+
+        for (int i = 0; i < num; i++)
+        {
+            float _angleOffSet = base_angle * i + 180;
+            StartCoroutine(Search(_angle + _angleOffSet));
+        }
+    }
+
+    IEnumerator Search(float angle)
+    {
+        _positionBullet = _transform.position;
+        vSpawn.x = Mathf.Cos((angle) * Mathf.Deg2Rad) * _force * 1.01f;
+        vSpawn.y = Mathf.Sin((angle) * Mathf.Deg2Rad) * _force * 1.01f;
+        _speedV = vSpawn;
+        for (int i = 0; i < 400; i++)
+        {
+            
+            Debug.DrawLine(_previousPositionBullet, _positionBullet, Color.blue);
+            _previousPositionBullet = _positionBullet;
+            _speedV += _acceleration * Time.fixedDeltaTime;
+            _positionBullet += _speedV * Time.fixedDeltaTime;
+
+            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
+                Vector2.zero);
+
+            if (_positionBullet.y < -15)
+            {
+                break;
+            }
+            foreach (var raycast in _raycast)
+            {
+                if (raycast.collider.tag == "wall")
+                {
+                    yield break;
+                }
+            }
+            if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
+            {
+                var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
+                _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((angle + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((angle + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(_minRange, _maxRange)) * 1.01f);
+                _shot = true;
+                _timer = 0;
+                if (Random.Range(0, 100) < 50)
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                }
+                else
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                }
+                break;
+            }
+
+        }
+
+        yield return new WaitForSeconds(1);
+        _shot = false;
+        yield return null;
     }
 
     IEnumerator Search_4()
@@ -105,10 +180,10 @@ public class shootIA : MonoBehaviour
             _speedV += _acceleration * Time.fixedDeltaTime;
             _positionBullet += _speedV * Time.fixedDeltaTime;
 
-            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.4f,
+            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
                 Vector2.zero);
 
-            if (_positionBullet.y < -5)
+            if (_positionBullet.y < -15)
             {
                 break;
             }
@@ -128,6 +203,15 @@ public class shootIA : MonoBehaviour
                 _angle4 = 180;
                 _force4 = 0;
                 _timer = 0;
+                GameObject.Find("player").GetComponent<moveCharacter>().disableJump();
+                if (Random.Range(0, 100) < 50)
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                }
+                else
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                }
                 break;
             }
 
@@ -159,10 +243,10 @@ public class shootIA : MonoBehaviour
             _speedV += _acceleration * Time.fixedDeltaTime;
             _positionBullet += _speedV * Time.fixedDeltaTime;
 
-            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.4f,
+            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
                 Vector2.zero);
 
-            if (_positionBullet.y < -5)
+            if (_positionBullet.y < -15)
             {
                 break;
             }
@@ -182,7 +266,17 @@ public class shootIA : MonoBehaviour
                 _angle3 = 180;
                 _force3 = 0;
                 _timer = 0;
+                GameObject.Find("player").GetComponent<moveCharacter>().disableJump();
+                if (Random.Range(0, 100) < 50)
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                }
+                else
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                }
                 break;
+
             }
 
         }
@@ -213,10 +307,10 @@ public class shootIA : MonoBehaviour
             _speedV += _acceleration * Time.fixedDeltaTime;
             _positionBullet += _speedV * Time.fixedDeltaTime;
 
-            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.4f,
+            RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
                 Vector2.zero);
 
-            if (_positionBullet.y < -5)
+            if (_positionBullet.y < -15)
             {
                 break;
             }
@@ -236,6 +330,15 @@ public class shootIA : MonoBehaviour
                 _angle2 = 180;
                 _force2 = 0;
                 _timer = 0;
+                GameObject.Find("player").GetComponent<moveCharacter>().disableJump();
+                if (Random.Range(0, 100) < 50)
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                }
+                else
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                }
                 break;
             }
 
@@ -271,7 +374,7 @@ public class shootIA : MonoBehaviour
             RaycastHit2D[] _raycast = Physics2D.CircleCastAll(_positionBullet, 0.5f,
                 Vector2.zero);
 
-            if (_positionBullet.y < -5)
+            if (_positionBullet.y < -15)
             {
                 break;
             }
@@ -291,6 +394,15 @@ public class shootIA : MonoBehaviour
                 _angle = 270;
                 _force = 0;
                 _timer = 0;
+                GameObject.Find("player").GetComponent<moveCharacter>().disableJump();
+                if (Random.Range(0, 100) < 50)
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                }
+                else
+                {
+                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                }
                 break;
             }
 
