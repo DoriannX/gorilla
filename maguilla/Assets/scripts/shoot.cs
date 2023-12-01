@@ -36,6 +36,8 @@ public class shoot : MonoBehaviour
     private GameObject[] _trajectoryDots = new GameObject[100];
     private Mouse mouse;
     private bool _settings;
+    private Image _leftArrowImage, _rightArrowImage;
+    private moveCharacter _moveCharacter;
     private void Awake()
     {
         _rbProjectile = _projectile.GetComponent<Rigidbody2D>();
@@ -53,7 +55,9 @@ public class shoot : MonoBehaviour
             _trajectoryDots[i].SetActive(false);
         }
         mouse = Mouse.current;
-
+        _leftArrowImage = _leftArrow.GetComponent<Image>();
+        _rightArrowImage = _rightArrow.GetComponent<Image>();
+        _moveCharacter = GetComponentInParent<moveCharacter>();
     }
 
     private void Update()
@@ -73,12 +77,12 @@ public class shoot : MonoBehaviour
         if (_wind > 0)
         {
             _leftArrow.SetActive(true);
-            _leftArrow.GetComponent<Image>().rectTransform.sizeDelta = new Vector2(100 + Mathf.Abs(_wind * 10), _leftArrow.GetComponent<Image>().rectTransform.sizeDelta.y);
+            _leftArrowImage.rectTransform.sizeDelta = new Vector2(100 + Mathf.Abs(_wind * 10), _leftArrowImage.rectTransform.sizeDelta.y);
             _rightArrow.SetActive(false);
         }else if (_wind < 0)
         {
             _rightArrow.SetActive(true);
-            _rightArrow.GetComponent<Image>().rectTransform.sizeDelta = new Vector2(100 + Mathf.Abs(_wind * 10), _leftArrow.GetComponent<Image>().rectTransform.sizeDelta.y);
+            _rightArrowImage.rectTransform.sizeDelta = new Vector2(100 + Mathf.Abs(_wind * 10), _leftArrowImage.rectTransform.sizeDelta.y);
             _leftArrow.SetActive(false);
         }
         else
@@ -132,10 +136,16 @@ public class shoot : MonoBehaviour
 
     private bool Loop()
     {
-        print(_settings);
         if (!_settings)
         {
-            _direction += mouse.delta.ReadValue() * 0.1f;
+            if (_moveCharacter.Controller())
+            {
+                _direction += _moveCharacter.getDirection() * 0.5f;
+            }
+            else
+            {
+                _direction += mouse.delta.ReadValue() * 0.1f;
+            }
         }
         _direction.x = Mathf.Clamp(_direction.x, 0, forceMax);
         _direction.y = Mathf.Clamp(_direction.y, -1, forceMax);

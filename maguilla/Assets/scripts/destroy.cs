@@ -7,11 +7,15 @@ public class destroy : MonoBehaviour
     private GameObject _shooter;
     private shootIA _sIA;
     private bool _landed = false;
+    private shoot _shoot;
+    private moveIA _moveIa;
     private void Awake()
     {
+        _shoot = GameObject.Find("shooter").GetComponent<shoot>();
        _transform = transform;
        _shooter = GameObject.Find("shooter2");
        _sIA = _shooter.GetComponent<shootIA>();
+       _moveIa = GameObject.Find("IA").GetComponent<moveIA>();
     }
 
     void Update()
@@ -34,7 +38,7 @@ public class destroy : MonoBehaviour
         {
             _landed = true;
             if (other.gameObject.TryGetComponent<playerLifeManager>(out playerLifeManager temp)) temp.hit(20);
-            GameObject.Find("shooter").GetComponent<shoot>().changeWind();
+            _shoot.changeWind();
             _sIA.reset_shot();
         }
 
@@ -44,8 +48,8 @@ public class destroy : MonoBehaviour
             {
                 _landed = true;
                 tempIA.hit(20);
-                GameObject.Find("IA").GetComponent<moveIA>().Move(false);
-                GameObject.Find("shooter").GetComponent<shoot>().changeWind();
+                _moveIa.Move(false);
+                _shoot.changeWind();
                 _sIA.reset_shot();
             }
         }

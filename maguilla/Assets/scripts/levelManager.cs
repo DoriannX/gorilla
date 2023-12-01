@@ -13,6 +13,8 @@ public class levelManager : MonoBehaviour
     public static float _difficulty = 1;
 
     [SerializeField] private GameObject _settingsMenu;
+    [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject _ia;
 
     private void Start()
     {
@@ -20,8 +22,8 @@ public class levelManager : MonoBehaviour
     }
     private void Awake()
     {
-        _plm = GameObject.Find("player").GetComponent<playerLifeManager>();
-        _IAlm = GameObject.Find("IA").GetComponent<IAlifeManager>(); 
+        _plm = _player.GetComponent<playerLifeManager>();
+        _IAlm = _ia.GetComponent<IAlifeManager>(); 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = false;
 
@@ -32,14 +34,5 @@ public class levelManager : MonoBehaviour
         
         _playerLife = _plm.Life();
         _IAlife = _IAlm.Life();
-    }
-
-
-    public void restart(InputAction.CallbackContext ctx)
-    {
-        _settingsMenu.SetActive(!_settingsMenu.activeSelf);
-        Cursor.visible = _settingsMenu.activeSelf;
-        GameObject.Find("shooter").GetComponent<shoot>().SetSettings(_settingsMenu.activeSelf);
-
     }
 }

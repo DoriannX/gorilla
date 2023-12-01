@@ -7,10 +7,12 @@ public class WinnerScript : MonoBehaviour
 {
     private TextMeshProUGUI _winner;
 
-
-    private void Update()
+    private void Awake()
     {
         _winner = GetComponent<TextMeshProUGUI>();
+    }
+    private void Update()
+    {
         if (IAlifeManager._life <= 0)
         {
             _winner.text = "You won";

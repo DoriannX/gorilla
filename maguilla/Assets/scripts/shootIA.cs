@@ -11,6 +11,7 @@ public class shootIA : MonoBehaviour
     [SerializeField] private float _maxRange;
     [SerializeField] private float _maxForce;
     [SerializeField] private float _stepForce;
+    [SerializeField] private GameObject _shooter, _ia, _player;
     private Transform _transform;
 
     private float _angle = 270;
@@ -28,14 +29,17 @@ public class shootIA : MonoBehaviour
     private Coroutine _coroutine;
     private Vector2 vSpawn = Vector2.zero;
     private bool _shot = false;
-    private moveIA mIA;
+    [SerializeField] private moveIA _mIA;
     private float _wind = 0;
     private float _shootCadence;
+    private CapsuleCollider2D _targetCapsuleCollider2D;
+    private moveCharacter _moveCharacter;
     private void Awake()
     {
         _transform = transform;
         _positionBullet = _transform.position;
-        mIA = GameObject.Find("IA").GetComponent<moveIA>();
+        _targetCapsuleCollider2D = _target.GetComponent<CapsuleCollider2D>();
+        _moveCharacter = _player.GetComponent<moveCharacter>();
     }
 
     private void Update()
@@ -47,11 +51,10 @@ public class shootIA : MonoBehaviour
             case 1: _shootCadence = 1; _minRange = _maxRange = 1; break;
             case 2: _shootCadence = 0.5f; _minRange = _maxRange = 0.5f; break;
         }
-        print(_shootCadence.ToString() + " " + _minRange.ToString() + " " + _maxRange.ToString());
     }
     private void FixedUpdate()
     {
-        if (GameObject.Find("shooter") != null) if (GameObject.Find("shooter").TryGetComponent<shoot>(out shoot temp)) _wind = temp.Wind();
+        if (_shooter != null) if (_shooter.TryGetComponent<shoot>(out shoot temp)) _wind = temp.Wind();
         _acceleration.x = _wind;
         if (_timer < _shootCadence) 
         {
@@ -64,7 +67,7 @@ public class shootIA : MonoBehaviour
             _speedV.y = Mathf.Sin(_angle * Mathf.Deg2Rad) * _force;
 
             Coroutine(180);
-            if (!mIA.is_move())
+            if (!_mIA.is_move())
             {
                 /*for (int i = 0; i < 50; i++)
                 {
@@ -144,7 +147,7 @@ public class shootIA : MonoBehaviour
                     yield break;
                 }
             }
-            if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
+            if (_targetCapsuleCollider2D.OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
                 _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((angle + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((angle + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(_minRange, _maxRange)) * 1.01f);
@@ -152,11 +155,11 @@ public class shootIA : MonoBehaviour
                 _timer = 0;
                 if (Random.Range(0, 100) < 50)
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                    _mIA.Move(false);
                 }
                 else
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                    _mIA.Move(true);
                 }
                 break;
             }
@@ -207,7 +210,7 @@ public class shootIA : MonoBehaviour
                     yield break;
                 }
             }
-            if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
+            if (_targetCapsuleCollider2D.OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
                 _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle4 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force4 + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((_angle4 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force4 + Random.Range(_minRange, _maxRange)) * 1.01f) ;
@@ -216,14 +219,13 @@ public class shootIA : MonoBehaviour
                 _angle4 = 180;
                 _force4 = 0;
                 _timer = 0;
-                GameObject.Find("player").GetComponent<moveCharacter>().disableJump();
                 if (Random.Range(0, 100) < 50)
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                    _mIA.Move(false);
                 }
                 else
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                    _mIA.Move(true);
                 }
                 break;
             }
@@ -270,7 +272,7 @@ public class shootIA : MonoBehaviour
                     yield break;
                 }
             }
-            if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
+            if (_targetCapsuleCollider2D.OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
                 _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle3 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force3 + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((_angle3 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force3 + Random.Range(_minRange, _maxRange)) * 1.01f);
@@ -279,14 +281,13 @@ public class shootIA : MonoBehaviour
                 _angle3 = 180;
                 _force3 = 0;
                 _timer = 0;
-                GameObject.Find("player").GetComponent<moveCharacter>().disableJump();
                 if (Random.Range(0, 100) < 50)
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                    _mIA.Move(false);
                 }
                 else
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                    _mIA.Move(true);
                 }
                 break;
 
@@ -334,7 +335,7 @@ public class shootIA : MonoBehaviour
                     yield break;
                 }
             }
-            if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
+            if (_targetCapsuleCollider2D.OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
                 _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle2 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force2 + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((_angle2 + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force2 + Random.Range(_minRange, _maxRange)) * 1.01f);
@@ -343,14 +344,13 @@ public class shootIA : MonoBehaviour
                 _angle2 = 180;
                 _force2 = 0;
                 _timer = 0;
-                GameObject.Find("player").GetComponent<moveCharacter>().disableJump();
                 if (Random.Range(0, 100) < 50)
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                    _mIA.Move(false);
                 }
                 else
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                    _mIA.Move(true);
                 }
                 break;
             }
@@ -398,7 +398,7 @@ public class shootIA : MonoBehaviour
                     yield break;
                 }
             }
-            if (_target.GetComponent<CapsuleCollider2D>().OverlapPoint(_positionBullet) && !_shot)
+            if (_targetCapsuleCollider2D.OverlapPoint(_positionBullet) && !_shot)
             {
                 var _ball = Instantiate(_projectile, _transform.position, Quaternion.identity);
                 _ball.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos((_angle + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(_minRange, _maxRange)) * 1.01f, Mathf.Sin((_angle + Random.Range(_minRange, _maxRange)) * Mathf.Deg2Rad) * (_force + Random.Range(_minRange, _maxRange)) * 1.01f);
@@ -407,14 +407,13 @@ public class shootIA : MonoBehaviour
                 _angle = 270;
                 _force = 0;
                 _timer = 0;
-                GameObject.Find("player").GetComponent<moveCharacter>().disableJump();
                 if (Random.Range(0, 100) < 50)
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(false);
+                    _mIA.Move(false);
                 }
                 else
                 {
-                    GameObject.Find("IA").GetComponent<moveIA>().Move(true);
+                    _mIA.Move(true);
                 }
                 break;
             }

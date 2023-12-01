@@ -26,7 +26,7 @@ public class IAlifeManager : MonoBehaviour
         if (_life <= 0)
         {
             
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 0, 0.1f);
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 0, 0.01f);
             if (Time.timeScale <= 0.01f)
             {
                 Cursor.visible = true;

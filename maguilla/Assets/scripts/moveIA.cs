@@ -14,6 +14,7 @@ public class moveIA : MonoBehaviour
     private bool _move = false;
     private bool _moveLeft = true;
     private Transform _transform;
+    private detectGroundIA _detectGroundIA;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class moveIA : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _dw = GetComponentInChildren<detectWall>();
         _transform = transform;
+        _detectGroundIA = GetComponentInChildren<detectGroundIA>();
     }
     private void Update()
     {
@@ -69,12 +71,12 @@ public class moveIA : MonoBehaviour
             }
         }
 
-        if (_dw.is_wall_in_front() && GetComponentInChildren<detectGroundIA>().isOnGround())
+        if (_dw.is_wall_in_front() && _detectGroundIA.isOnGround())
         {
             _timer = 0;
             _move = true;
             _rb.velocity += Vector2.up * _jumpForce;
-            _rb.velocity = new Vector2(0, Mathf.Clamp(_rb.velocity.y, 0, 25)) ;
+            _rb.velocity = new Vector2(0, Mathf.Clamp(_rb.velocity.y, 0, 25));
         }
     }
 
