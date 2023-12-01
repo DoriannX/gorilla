@@ -1,21 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class levelManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _playerLifeText;
-    [SerializeField] private TextMeshProUGUI _IAlifeText;
-
     private float _playerLife;
     private float _IAlife;
     private playerLifeManager _plm;
     private IAlifeManager _IAlm;
+    public static float _difficulty = 1;
 
+    [SerializeField] private GameObject _settingsMenu;
+
+    private void Start()
+    {
+        Time.timeScale = 1.0f;
+    }
     private void Awake()
     {
         _plm = GameObject.Find("player").GetComponent<playerLifeManager>();
@@ -30,13 +32,14 @@ public class levelManager : MonoBehaviour
         
         _playerLife = _plm.Life();
         _IAlife = _IAlm.Life();
-        _playerLifeText.text = _playerLife.ToString();
-        _IAlifeText.text = _IAlife.ToString();
     }
 
 
     public void restart(InputAction.CallbackContext ctx)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        _settingsMenu.SetActive(!_settingsMenu.activeSelf);
+        Cursor.visible = _settingsMenu.activeSelf;
+        GameObject.Find("shooter").GetComponent<shoot>().SetSettings(_settingsMenu.activeSelf);
+
     }
 }
