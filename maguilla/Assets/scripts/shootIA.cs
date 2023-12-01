@@ -30,18 +30,30 @@ public class shootIA : MonoBehaviour
     private bool _shot = false;
     private moveIA mIA;
     private float _wind = 0;
+    private float _shootCadence;
     private void Awake()
     {
         _transform = transform;
         _positionBullet = _transform.position;
         mIA = GameObject.Find("IA").GetComponent<moveIA>();
     }
+
+    private void Update()
+    {
+        switch (levelManager._difficulty)
+        {
+            case 0: _shootCadence = 3;
+                _minRange = _maxRange = 2; break;
+            case 1: _shootCadence = 1; _minRange = _maxRange = 1; break;
+            case 2: _shootCadence = 0.5f; _minRange = _maxRange = 0.5f; break;
+        }
+        print(_shootCadence.ToString() + " " + _minRange.ToString() + " " + _maxRange.ToString());
+    }
     private void FixedUpdate()
     {
         if (GameObject.Find("shooter") != null) if (GameObject.Find("shooter").TryGetComponent<shoot>(out shoot temp)) _wind = temp.Wind();
         _acceleration.x = _wind;
-        print(_timer);
-        if (_timer < 3) 
+        if (_timer < _shootCadence) 
         {
             _timer += Time.fixedDeltaTime;
         }
@@ -50,9 +62,10 @@ public class shootIA : MonoBehaviour
             _previousPositionBullet = _transform.position;
             _speedV.x = Mathf.Cos(_angle * Mathf.Deg2Rad) * _force;
             _speedV.y = Mathf.Sin(_angle * Mathf.Deg2Rad) * _force;
+
+            Coroutine(180);
             if (!mIA.is_move())
             {
-                Coroutine(180);
                 /*for (int i = 0; i < 50; i++)
                 {
                     if (_force >= _maxForce && _force2 >= _maxForce && _force3 >= _maxForce && _force4 >= _maxForce)

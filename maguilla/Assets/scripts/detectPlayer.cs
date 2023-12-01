@@ -17,6 +17,7 @@ public class detectPlayer : MonoBehaviour
         {
             Instantiate(_particleSystem, _transform.position, Quaternion.identity);
             Destroy(gameObject);
+            Camera.main.GetComponent<shakeCamera>().Start();
         }
     }
     private void OnTriggerStay2D(Collider2D other)

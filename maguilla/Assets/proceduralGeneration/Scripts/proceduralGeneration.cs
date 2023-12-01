@@ -7,8 +7,7 @@ using Random = UnityEngine.Random;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    [SerializeField] private int _width, _height;
-    //[SerializeField] private GameObject _dirt, _grass;
+    [SerializeField] private int _width, _height, _minHeight, _maxHeight;
     [SerializeField] private int _repeatNum;
     [SerializeField] private int _posX;
     [SerializeField] private int _posY;
@@ -31,6 +30,7 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 _seed = Random.Range(-1000000, 1000000);
                 _height = Mathf.RoundToInt(_heightValue * Mathf.PerlinNoise(x/_smoothness, _seed));
+                _height = Mathf.Clamp(_height, _minHeight, _maxHeight);
                 GenerateFlatPlatform(x);
                 repeatValue = _repeatNum;
             }

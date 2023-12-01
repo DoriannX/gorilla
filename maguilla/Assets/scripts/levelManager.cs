@@ -1,15 +1,18 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using UnityEngine.SceneManagement;
 
 public class levelManager : MonoBehaviour
 {
-
     private float _playerLife;
     private float _IAlife;
     private playerLifeManager _plm;
     private IAlifeManager _IAlm;
+    public static float _difficulty = 1;
+
+    [SerializeField] private GameObject _settingsMenu;
 
     private void Start()
     {
@@ -34,6 +37,9 @@ public class levelManager : MonoBehaviour
 
     public void restart(InputAction.CallbackContext ctx)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        _settingsMenu.SetActive(!_settingsMenu.activeSelf);
+        Cursor.visible = _settingsMenu.activeSelf;
+        GameObject.Find("shooter").GetComponent<shoot>().SetSettings(_settingsMenu.activeSelf);
+
     }
 }

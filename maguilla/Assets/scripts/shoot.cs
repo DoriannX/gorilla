@@ -11,15 +11,18 @@ public class shoot : MonoBehaviour
     [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _trajectoryDot;
     [SerializeField] private GameObject _trajectory;
-    [SerializeField] private float _wind;
+    [SerializeField] private int _windRange;
     [SerializeField] private float forceMax;
     [SerializeField] private ParticleSystem _fireShoot;
     [SerializeField] private Image _shotIcon;
     [SerializeField] private GameObject _leftArrow;
     [SerializeField] private GameObject _rightArrow;
     [SerializeField] private TextMeshProUGUI _windText;
-    
+    [SerializeField] private ParticleSystem _windParticle;
+    [SerializeField] private ParticleSystem _fireParticleLeft, _fireParticleHeadLeft, _fireParticleRight, _fireParticleHeadRight;
 
+
+    private float _wind;
     private Rigidbody2D _rbProjectile;
     private bool _shootingController = false;
     private Transform _transform;
@@ -32,6 +35,7 @@ public class shoot : MonoBehaviour
     private Vector2 _acceleration;
     private GameObject[] _trajectoryDots = new GameObject[100];
     private Mouse mouse;
+    private bool _settings;
     private void Awake()
     {
         _rbProjectile = _projectile.GetComponent<Rigidbody2D>();
@@ -42,7 +46,7 @@ public class shoot : MonoBehaviour
         _positionBullet = _transform.position;
         _previousPositionBullet = _positionBullet;
         _acceleration = new Vector2(_wind, -9.80665f);
-        _wind = Random.Range(-15, 15);
+        _wind = Random.Range(-_windRange, _windRange);
         for (int i = 0; i < 100; i++)
         {
             _trajectoryDots[i] = Instantiate(_trajectoryDot, _positionBullet, Quaternion.identity, _trajectory.transform);
@@ -55,6 +59,17 @@ public class shoot : MonoBehaviour
     private void Update()
     {
         _windText.text = Mathf.Abs(_wind).ToString();
+        ParticleSystem ps = _windParticle;
+        var main = ps.main;
+        if (_wind != 0)
+        {
+            _windParticle.gameObject.SetActive(true);
+            main.startSpeedMultiplier = -_wind;
+        }
+        else
+        {
+            _windParticle.gameObject.SetActive(false);
+        }
         if (_wind > 0)
         {
             _leftArrow.SetActive(true);
@@ -71,7 +86,7 @@ public class shoot : MonoBehaviour
             _leftArrow.SetActive(false);
             _leftArrow.SetActive(false);
         }
-        _shotIcon.fillAmount += Time.deltaTime / 3;
+        _shotIcon.fillAmount += Time.deltaTime / 2;
         if (_timer < 3)
         {
             _fireShoot.gameObject.SetActive(false);
@@ -80,7 +95,27 @@ public class shoot : MonoBehaviour
         {
             _fireShoot.gameObject.SetActive(true);
         }
+
+        SetWindToArrow(_fireParticleLeft, _wind, true); SetWindToArrow(_fireParticleRight, _wind, true);
+        SetWindToArrow(_fireParticleHeadLeft, _wind, false); SetWindToArrow(_fireParticleHeadRight, -_wind, false);
         _timer += Time.deltaTime;
+    }
+
+    public void SetSettings(bool state)
+    {
+        _settings = state;
+    }
+
+    private void SetWindToArrow(ParticleSystem currentArrow, float currentWind, bool rescaling)
+    {
+        if (rescaling)
+        {
+            currentArrow.gameObject.transform.localScale = new Vector3(Mathf.Abs(_wind / 10f) + 1, currentArrow.gameObject.transform.localScale.y);
+        }
+        ParticleSystem.VelocityOverLifetimeModule _fireVelocity = currentArrow.velocityOverLifetime;
+        ParticleSystem.MinMaxCurve rate = new ParticleSystem.MinMaxCurve();
+        rate.constant = currentWind;
+        _fireVelocity.x = rate;
     }
 
     private void FixedUpdate()
@@ -92,13 +127,16 @@ public class shoot : MonoBehaviour
     public void changeWind()
     {
 
-        _wind = Random.Range(-15, 15);
+        _wind = Random.Range(-_windRange, _windRange);
     }
 
     private bool Loop()
     {
-        
-        _direction += mouse.delta.ReadValue() * 0.1f;
+        print(_settings);
+        if (!_settings)
+        {
+            _direction += mouse.delta.ReadValue() * 0.1f;
+        }
         _direction.x = Mathf.Clamp(_direction.x, 0, forceMax);
         _direction.y = Mathf.Clamp(_direction.y, -1, forceMax);
         var vSpawn = _direction;
@@ -158,7 +196,7 @@ public class shoot : MonoBehaviour
 
     public void ShootPerformed(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && _timer >= 3)
+        if (ctx.performed && _timer >= 2 && !_settings)
         {
             var projectile = Instantiate(_projectile, _transform.position, Quaternion.identity);
             _direction += mouse.delta.ReadValue();
@@ -198,6 +236,10 @@ public class shoot : MonoBehaviour
         return _shootingController;
     }
 
+    public bool Settings()
+    {
+        return _settings;
+    }
     public float Wind()
     {
         return _wind;

@@ -72,7 +72,8 @@ public class moveCharacter : MonoBehaviour
 
     public void onMovementPerformed(InputAction.CallbackContext context)
     {
-        _moveVector = context.ReadValue<Vector2>();
+        if(!GameObject.Find("shooter").GetComponent<shoot>().Settings())
+            _moveVector = context.ReadValue<Vector2>();
     }
 
     private void onMovementCanceled(InputAction.CallbackContext context)
