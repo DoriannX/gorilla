@@ -29,7 +29,7 @@ public class playerLifeManager : MonoBehaviour
         if (_life <= 0)
         {
             
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 0, 0.01f);
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 0, 0.05f);
             if (Time.timeScale <= 0.01f)
             {
                 Time.timeScale = 1;

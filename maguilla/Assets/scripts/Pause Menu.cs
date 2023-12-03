@@ -40,7 +40,11 @@ public class PauseMenu : MonoBehaviour
         gameObject.SetActive(!gameObject.activeSelf);
         Cursor.visible = gameObject.activeSelf;
         if (gameObject.activeSelf) Time.timeScale = 0;
-        else Time.timeScale = 1;
+        else
+        {
+            Time.timeScale = 1;
+            _fire.gameObject.SetActive(false);
+        }
     }
 
     public void MainMenu()
